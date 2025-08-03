@@ -3,12 +3,16 @@ name: Auto EUserv
 on:
   schedule:
     - cron: '0 12 * * SUN'  # 每周日 UTC 时间 12:00 运行
+  watch:
+    types: started
   workflow_dispatch:
 
 jobs:
   run-script:
     runs-on: ubuntu-latest
-
+    
+    if: github.event_name == 'schedule' || github.event_name == 'watch' && github.event.repository.owner.id == github.event.sender.id
+    
     steps:
     - name: Checkout repository
       uses: actions/checkout@main
